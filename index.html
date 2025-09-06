@@ -2,10 +2,117 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Pencatatan Kuota v1.3</title>
+    <title>Pencatatan Kuota v1.4</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            background-color: #007acc;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        section {
+            background-color: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #007acc;
+        }
+        input, select {
+            margin: 5px 0;
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px;
+            background-color: #007acc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #005f99;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #e6f2ff;
+        }
+    </style>
 </head>
 <body>
-    <h1>Selamat datang di Aplikasi Pencatatan Kuota v1.3</h1>
-    <p>Versi ini mendukung pencatatan offline dan siap di-deploy ke GitHub Pages.</p>
+    <header>Aplikasi Pencatatan Kuota v1.4</header>
+
+    <section>
+        <h2>Pencatatan Pendapatan Kuota</h2>
+        <input type="date" id="tanggalPendapatan">
+        <input type="text" id="provider" placeholder="Provider">
+        <input type="number" id="jumlahPendapatan" placeholder="Jumlah Pendapatan">
+        <button onclick="tambahPendapatan()">Tambah Pendapatan</button>
+        <table id="tabelPendapatan">
+            <tr><th>Tanggal</th><th>Provider</th><th>Jumlah</th></tr>
+        </table>
+    </section>
+
+    <section>
+        <h2>Catatan Pengeluaran Pribadi</h2>
+        <input type="date" id="tanggalPengeluaran">
+        <select id="kategori">
+            <option value="Makan">Makan</option>
+            <option value="Jajan">Jajan</option>
+            <option value="Transport">Transport</option>
+            <option value="Lainnya">Lainnya</option>
+        </select>
+        <input type="number" id="jumlahPengeluaran" placeholder="Jumlah Pengeluaran">
+        <button onclick="tambahPengeluaran()">Tambah Pengeluaran</button>
+        <table id="tabelPengeluaran">
+            <tr><th>Tanggal</th><th>Kategori</th><th>Jumlah</th></tr>
+        </table>
+    </section>
+
+    <script>
+        function tambahPendapatan() {
+            const tanggal = document.getElementById("tanggalPendapatan").value;
+            const provider = document.getElementById("provider").value;
+            const jumlah = document.getElementById("jumlahPendapatan").value;
+            const tabel = document.getElementById("tabelPendapatan");
+            const row = tabel.insertRow(-1);
+            row.insertCell(0).innerText = tanggal;
+            row.insertCell(1).innerText = provider;
+            row.insertCell(2).innerText = jumlah;
+        }
+
+        function tambahPengeluaran() {
+            const tanggal = document.getElementById("tanggalPengeluaran").value;
+            const kategori = document.getElementById("kategori").value;
+            const jumlah = document.getElementById("jumlahPengeluaran").value;
+            const tabel = document.getElementById("tabelPengeluaran");
+            const row = tabel.insertRow(-1);
+            row.insertCell(0).innerText = tanggal;
+            row.insertCell(1).innerText = kategori;
+            row.insertCell(2).innerText = jumlah;
+        }
+    </script>
 </body>
 </html>
