@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Masuk – Catatan Kuota</title>
+  <style>
+    :root{--bg:#0f172a;--card:#0b1220;--border:#1f2937;--text:#e5e7eb;--muted:#94a3b8;--accent:#22c55e;--danger:#ef4444}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100svh;display:grid;place-items:center;background:linear-gradient(180deg,#0b1220,#0f172a 40%,#0b1220);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text)}
+    .card{width:clamp(300px,90vw,420px);background:rgba(17,24,39,.7);border:1px solid var(--border);border-radius:14px;padding:18px}
+    h1{margin:0 0 8px 0;font-size:20px}
+    .muted{color:var(--muted);font-size:12px;margin-bottom:16px}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+    input,button{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px}
+    button{cursor:pointer;background:var(--accent);color:#0b1220;border:none;font-weight:700}
+    .err{color:var(--danger);font-size:12px;min-height:18px;margin-top:8px}
+    .tips{margin-top:14px;color:var(--muted);font-size:12px}
+    .row{display:flex;gap:8px;margin-top:10px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Masuk</h1>
+    <div class="muted">Masukkan kata sandi untuk membuka aplikasi.</div>
+    <label for="pwd">Kata sandi</label>
+    <input id="pwd" type="password" placeholder="••••••••" autocomplete="current-password" />
+    <div class="row">
+      <button id="btnLogin">Masuk</button>
+      <button id="btnShow" style="background:#334155;color:#e5e7eb">Lihat</button>
+    </div>
+    <div class="err" id="err"></div>
+    <div class="tips">
+      <b>Catatan keamanan:</b> Ini login sederhana di sisi klien (front‑end). Jangan gunakan untuk data sangat sensitif. Ganti kata sandi di kode (lihat <code>PASS_HASH</code>), atau lindungi dengan autentikasi server jika di Vercel.
+    </div>
+  </div>
+
+  <script>
+    // Ubah hash ini dengan hash SHA-256 dari password pilihanmu.
+    // Default: password 'taufik123'. Ganti segera!
+    const PASS_HASH = '96eab8aec7841ecc477465c904f0ddcf5a556c95701f12de82b227aa81af5209';
+
+    async function sha256(str){
+      const enc = new TextEncoder().encode(str);
+      const digest = await crypto.subtle.digest('SHA-256', enc);
+      return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+
+    document.getElementById('btnShow').addEventListener('click',()=>{
+      const p=document.getElementById('pwd'); p.type = (p.type==='password') ? 'text' : 'password';
+    });
+
+    document.getElementById('btnLogin').addEventListener('click', async ()=>{
+      const pwd = document.getElementById('pwd').value;
+      const h = await sha256(pwd);
+      if(h === PASS_HASH){
+        localStorage.setItem('kuota_auth','ok');
+        location.href = 'index.html';
+      } else {
+        document.getElementById('err').textContent = 'Password salah.';
+      }
+    });
+
+    // Enter to submit
+    document.getElementById('pwd').addEventListener('keydown', (e)=>{ if(e.key==='Enter') document.getElementById('btnLogin').click(); });
+  </script>
+</body>
+</html>
